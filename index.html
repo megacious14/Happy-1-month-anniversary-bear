@@ -9,9 +9,9 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
   font-family: Arial, sans-serif;
   color: white;
+  overflow: hidden;
 }
 
 /* BACKGROUND */
@@ -19,7 +19,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: url("IMG_3907.jpeg") no-repeat center/cover;
+  background: url("IMG_3907.jpeg") center/cover no-repeat;
   filter: blur(6px) brightness(0.35);
   transform: scale(1.05);
   z-index: -1;
@@ -28,47 +28,56 @@ body::before {
 /* PAGE */
 .container {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: none;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 40px;
+  text-align: center;
+  padding: 30px;
   box-sizing: border-box;
 }
 
-.show { display: flex; }
+.show {
+  display: flex;
+  z-index: 10;
+}
 
 /* TEXT */
-h1, h2, p { text-shadow: 0 2px 10px black; }
-h2 { font-size: 32px; }
-p { font-size: 22px; max-width: 800px; }
+h1, h2, p {
+  text-shadow: 0 2px 10px black;
+}
+
+h2 { font-size: 30px; }
+p { font-size: 20px; max-width: 700px; }
 
 /* BUTTON */
 button {
   padding: 12px 20px;
-  border: none;
   border-radius: 10px;
-  font-size: 16px;
+  border: none;
   margin-top: 20px;
+  font-size: 16px;
   cursor: pointer;
 }
 
-/* INPUT */
+/* INPUT (FORCE ABOVE EVERYTHING) */
 input {
-  padding: 14px;
+  padding: 15px;
+  font-size: 18px;
   border-radius: 12px;
   border: none;
-  font-size: 18px;
   text-align: center;
+  margin-top: 15px;
+  z-index: 50;
+  position: relative;
 }
 
-/* SLIDES */
+/* SLIDESHOW */
 .slide {
   display: none;
-  width: 320px;
-  height: 320px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   border-radius: 20px;
 }
@@ -77,6 +86,16 @@ input {
 /* CURSOR */
 #cursor { animation: blink 1s infinite; }
 @keyframes blink { 50% {opacity:0;} }
+
+/* HEARTS */
+.heart {
+  position: fixed;
+  animation: float 6s linear infinite;
+}
+@keyframes float {
+  from {transform: translateY(100vh);}
+  to {transform: translateY(-10vh);}
+}
 </style>
 </head>
 
@@ -92,10 +111,11 @@ input {
   <button onclick="start()">Start 💗</button>
 </div>
 
-<!-- CODE -->
+<!-- CODE SCREEN -->
 <div class="container" id="codeScreen">
   <h2>Enter our code 💗</h2>
-  <input type="password" id="codeInput">
+  <p style="opacity:0.7;">hint: when we started dating…</p>
+  <input type="password" id="codeInput" placeholder="type here">
 </div>
 
 <!-- COUNTDOWN -->
@@ -128,7 +148,7 @@ input {
   <button onclick="goTo('playlist')">Final 💗</button>
 </div>
 
-<!-- PLAYLIST -->
+<!-- PLAYLIST (ONLY ACTIVE LAST) -->
 <div class="container" id="playlist">
   <h2>Our Playlist 🎶</h2>
 
@@ -145,12 +165,11 @@ let current = "start";
 
 /* START */
 function start() {
-  let m = document.getElementById("music");
-  m.play();
+  document.getElementById("music").play();
   goTo("codeScreen");
 }
 
-/* NAV */
+/* NAVIGATION */
 function goTo(id) {
   document.getElementById(current).classList.remove("show");
   document.getElementById(id).classList.add("show");
@@ -160,7 +179,7 @@ function goTo(id) {
   if (id === "gallery") startSlideshow();
 }
 
-/* PASSWORD FIX */
+/* PASSWORD (WORKS 100%) */
 document.getElementById("codeInput").addEventListener("input", function() {
   let val = this.value.toLowerCase().trim();
   if (val === "18thmarch") {
@@ -170,67 +189,56 @@ document.getElementById("codeInput").addEventListener("input", function() {
 
 /* COUNTDOWN */
 let startDate = new Date("March 18, 2026");
-setInterval(()=>{
-  let d=Math.floor((new Date()-startDate)/86400000);
-  document.getElementById("time").innerHTML=d+" days 💗";
-},1000);
+setInterval(() => {
+  let d = Math.floor((new Date() - startDate) / 86400000);
+  document.getElementById("time").innerHTML = d + " days 💗";
+}, 1000);
 
 /* TYPING */
-const text = `Dear bear🧸💗,
-i really don’t know how to even start😭 
-but i love love you soooooo muchhhhhhh. 
-I love when you’re happy, i love your eyes, 
-your smile, your laughter, i love your height, 
-i love every single thing about you. 
-i love how you feel sometimes feel a bit awkward 
-and you feel like i wouldn’t understand you but 
-it makes you the cutest honestly and 
-i tell you to not be shy🙃… i love how smart you are! 
-and i am going to love every single moment of yours, 
-your happy times as well as your sad times but i pray 
-and hope you’re happy all the time🥹🥹🥹💗… 
-i’m actually allowing myself to be loved and i’m going 
-to love you through and through!💗💗 you may not know 
-but you make me really happy and sometimes i think this 
-is not real and im going to love you always Nana Wiredu Gyan🥹💗 
-and i know we’ll last forever 🙃🙃💗 It's so rare to find a someone like you, 
-somehow when you're around,the sky is always blue,the way we talk, 
-the things you say the way you make it all okay and how you know all of my jokes 
-but  you laugh anyway… if I could wish for one thing I'd take the smile that you bring
-Wherever you go in this world I'll come along
-Together we dream the same dream
-Forever I'm here for you, you're here for me
-Happy One Month Anniversary!!💗`;
-let i=0;
-let sound=new Audio("typing.mp3");
+const text = `PASTE YOUR MESSAGE HERE`;
 
-function startTyping(){
-  let el=document.getElementById("typedText");
-  el.innerHTML="";
-  i=0;
+let i = 0;
+let sound = new Audio("typing.mp3");
 
-  function type(){
-    if(i<text.length){
-      sound.currentTime=0;
+function startTyping() {
+  let el = document.getElementById("typedText");
+  el.innerHTML = "";
+  i = 0;
+
+  function type() {
+    if (i < text.length) {
+      sound.currentTime = 0;
       sound.play();
-      el.innerHTML=text.substring(0,i+1)+'<span id="cursor">|</span>';
+      el.innerHTML = text.substring(0, i + 1) + '<span id="cursor">|</span>';
       i++;
-      setTimeout(type,15);
+      setTimeout(type, 15);
     }
   }
+
   type();
 }
 
 /* SLIDESHOW */
-function startSlideshow(){
-  let slides=document.querySelectorAll(".slide");
-  let i=0;
-  setInterval(()=>{
-    slides.forEach(s=>s.classList.remove("active"));
-    i=(i+1)%slides.length;
+function startSlideshow() {
+  let slides = document.querySelectorAll(".slide");
+  let i = 0;
+
+  setInterval(() => {
+    slides.forEach(s => s.classList.remove("active"));
+    i = (i + 1) % slides.length;
     slides[i].classList.add("active");
-  },2000);
+  }, 2000);
 }
+
+/* HEARTS */
+setInterval(() => {
+  let h = document.createElement("div");
+  h.innerHTML = "💗";
+  h.classList.add("heart");
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 6000);
+}, 500);
 </script>
 
 </body>
